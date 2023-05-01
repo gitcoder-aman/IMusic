@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/background"
+    tools:context=".PlayerActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/previous"
+            android:src="@drawable/ic_back"
+            app:tint="@color/white" />
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/world_of_music"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            tools:ignore="NestedWeights" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_favorite_empty"
+            android:contentDescription="@string/like_songs"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+    
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_margin="10dp"
+        app:shapeAppearanceOverlay="@style/curved"
+        app:strokeColor="@color/cool_Blue"
+        app:strokeWidth="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/music_listener_image"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/music_animation"
+        app:lottie_autoPlay="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:text="@string/song_name"
+        android:fontFamily="@font/noto_regular"
+        android:gravity="center"
+        android:layout_marginHorizontal="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:icon="@drawable/ic_previous"
+            android:backgroundTint="@color/blueColor"
+            app:iconSize="30dp"
+            app:iconTint="@color/white"
+            android:id="@+id/previousBtn"/>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:icon="@drawable/ic_pause"
+            app:iconSize="50dp"
+            app:shapeAppearanceOverlay="@style/curved"
+            android:backgroundTint="@android:color/holo_red_light"
+            app:iconTint="@color/white"
+            android:layout_marginHorizontal="40dp"
+            android:id="@+id/playPauseBtn"/>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:icon="@drawable/ic_next"
+            android:backgroundTint="@color/blueColor"
+            app:iconTint="@color/white"
+            app:iconSize="30dp"
+            android:id="@+id/nextBtn"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/_00_00"
+            android:gravity="center"
+            android:fontFamily="@font/noto_regular"
+            android:textSize="15sp"/>
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:thumbTint="@color/blueColor"
+            android:thumbTintMode="src_in"
+            android:progressBackgroundTint="@color/white"
+            android:progressTint="@android:color/holo_red_light"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/loading"
+            android:gravity="center"
+            android:fontFamily="@font/noto_regular"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_repeat"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:contentDescription="@string/repeat"
+            app:tint="@color/white"
+            tools:ignore="NestedWeights" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_equilzer"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:contentDescription="@string/equalizer"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_timer"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:contentDescription="@string/timer"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_share"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:contentDescription="@string/share"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

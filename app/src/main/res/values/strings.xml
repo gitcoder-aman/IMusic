@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">IMusic</string>
+    <string name="playlists">Playlists</string>
+    <string name="favorite">Favorite</string>
+    <string name="shuffle">Shuffle</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="total_songs">Total Songs</string>
+    <string name="world_of_music">world of Music</string>
+    <string name="repeat">Repeat</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="timer">Timer</string>
+    <string name="share">Share</string>
+    <string name="previous">Previous</string>
+    <string name="like_songs">Like Songs</string>
+    <string name="loading">Loading</string>
+    <string name="_00_00">00:00</string>
+    <string name="song_name">Song Name</string>
+    <string name="playlist">Playlist</string>
+    <string name="search_your_music">Search your music</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="feedback">Feedback</string>
+    <string name="setting">Setting</string>
+    <string name="about">About</string>
+    <string name="developer">Developer</string>
+    <string name="song_album">song album</string>
+    <string name="welcome_to_n_imusic">Welcome to\n IMusic</string>
+</resources>
