@@ -12,16 +12,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tech.imusic.PlayerActivity
 import com.tech.imusic.adapter.MusicAdapter
-import com.tech.imusic.databinding.FragmentSufflerBinding
+import com.tech.imusic.databinding.FragmentSongBinding
 import com.tech.imusic.model.Music
 import java.io.File
 
 class SongFragment : Fragment() {
 
-    private lateinit var binding:FragmentSufflerBinding
-    private lateinit var musicAdapter:MusicAdapter
+    private lateinit var binding: FragmentSongBinding
     companion object {
         var musicArrayList: ArrayList<Music> = ArrayList()
+        @SuppressLint("StaticFieldLeak")
+        lateinit var musicAdapter:MusicAdapter
     }
 
     @SuppressLint("SetTextI18n")
@@ -30,7 +31,7 @@ class SongFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentSufflerBinding.inflate(layoutInflater,container,false)
+        binding = FragmentSongBinding.inflate(layoutInflater,container,false)
 
         binding.musicRecycler.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
 
@@ -44,8 +45,10 @@ class SongFragment : Fragment() {
         binding.totalSong.text = "Total Songs: "+musicAdapter.itemCount
 
         binding.shuffleBtn.setOnClickListener {
-            val intent = Intent(activity, PlayerActivity::class.java)
-            startActivity(intent)
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra("index",0)
+            intent.putExtra("class","SongFragment")
+            context?.startActivity(intent)
         }
         return binding.root
     }
@@ -56,6 +59,7 @@ class SongFragment : Fragment() {
         val projection = arrayOf(Media._ID,Media.TITLE,Media.ALBUM,Media.ARTIST,Media.DURATION,Media.DATE_ADDED,Media.DATA,Media.ALBUM_ID)
 
         val cursor = activity?.contentResolver?.query(Media.EXTERNAL_CONTENT_URI,projection,selection,null,Media.DATE_ADDED+" DESC",null)
+        musicArrayList.clear()
         if(cursor != null ){
             if(cursor.moveToFirst()){
                 do {

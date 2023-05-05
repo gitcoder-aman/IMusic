@@ -15,14 +15,15 @@ import com.tech.imusic.R
 import com.tech.imusic.model.Music
 import com.tech.imusic.util.Utils
 
-class MusicAdapter(val context: Context, private var musicArraylist: ArrayList<Music>) :
-    RecyclerView.Adapter<MusicAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicAdapter.ViewHolder {
+class MusicSearchAdapter(val context: Context, var musicArraylist: ArrayList<Music>) :
+    RecyclerView.Adapter<MusicSearchAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicSearchAdapter.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.music_view_layout, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MusicAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MusicSearchAdapter.ViewHolder, position: Int) {
         val model = musicArraylist[position]
 
         holder.songName?.text = model.title
@@ -40,18 +41,10 @@ class MusicAdapter(val context: Context, private var musicArraylist: ArrayList<M
             .into(holder.songImage!!)
 
         holder.itemView.setOnClickListener {
-
-            if(musicArraylist[position].id == PlayerActivity.nowPlayingId){
-                val intent = Intent(context, PlayerActivity::class.java)
-                intent.putExtra("index", PlayerActivity.songPosition)
-                intent.putExtra("class", "NowPlaying")
-                context.startActivity(intent)
-            }else {
-                val intent = Intent(context, PlayerActivity::class.java)
-                intent.putExtra("index", position)
-                intent.putExtra("class", "MusicAdapter")
-                context.startActivity(intent)
-            }
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra("index",position)
+            intent.putExtra("class","MusicSearchAdapter")
+            context.startActivity(intent)
         }
     }
 

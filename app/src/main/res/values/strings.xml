@@ -27,4 +27,8 @@
     <string name="developer">Developer</string>
     <string name="song_album">song album</string>
     <string name="welcome_to_n_imusic">Welcome to\n IMusic</string>
+    <string name="imusic">IMusic</string>
+    <string name="min_15">15 Minutes</string>
+    <string name="min_30">30 Minutes</string>
+    <string name="min_60">60 Minutes</string>
 </resources>

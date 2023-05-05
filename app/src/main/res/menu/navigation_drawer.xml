@@ -13,7 +13,7 @@
         android:title="@string/about"
         android:icon="@drawable/ic_about"/>
 
-    <item android:id="@+id/navigation_developer"
+    <item android:id="@+id/menu_developer"
         android:title="@string/developer"
         android:icon="@drawable/ic_developer"/>
 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/light_endColor"
+    android:padding="10dp">
+    
+    <LinearLayout
+        android:id="@+id/min15Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_timer"
+            app:tint="@color/white"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/min_15" />
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/min_15"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/min30Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_timer"
+            app:tint="@color/white"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/min_15" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/min_30"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/min60Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_timer"
+            app:tint="@color/white"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/min_15" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/min_60"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+</LinearLayout>
