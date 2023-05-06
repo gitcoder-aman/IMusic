@@ -11,6 +11,8 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -22,9 +24,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.tech.imusic.fragments.SongFragment
 import com.tech.imusic.model.Music
 import com.tech.imusic.databinding.ActivityPlayerBinding
+import com.tech.imusic.fragments.FavoriteFragment
 import com.tech.imusic.fragments.NowPlayingFragment
 import com.tech.imusic.services.MusicService
 import com.tech.imusic.util.Utils
@@ -35,7 +40,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     private var classIntentString:String ?= null
     companion object {
         var songPosition: Int = 0
-        lateinit var musicArrayList: ArrayList<Music>
+        var musicArrayList: ArrayList<Music> = ArrayList()
         var musicService: MusicService? = null
         var isPlaying: Boolean = false
 
@@ -46,8 +51,11 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var min30: Boolean = false
         var min60: Boolean = false
         var nowPlayingId:String = ""
+        var isFavorite:Boolean = false
+        var fIndex:Int = -1
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
@@ -65,7 +73,24 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             finish()
         }
         binding.favoriteBtn.setOnClickListener {
-
+            if(isFavorite){
+                binding.favoriteBtn.setImageResource(R.drawable.ic_favorite_empty)
+                isFavorite = false
+                FavoriteFragment.favoriteList.removeAt(fIndex)
+            }else{
+                binding.favoriteBtn.setImageResource(R.drawable.ic_favorite)
+                isFavorite = true
+                FavoriteFragment.favoriteList.add(musicArrayList[songPosition])
+                if(FavoriteFragment.adapter != null)
+                FavoriteFragment.adapter!!.notifyDataSetChanged()
+            }
+            if(FavoriteFragment.binding != null){
+                if(FavoriteFragment.favoriteList.size < 1){
+                    FavoriteFragment.binding?.favoriteShuffle?.visibility = View.INVISIBLE
+                }else{
+                    FavoriteFragment.binding?.favoriteShuffle?.visibility = View.VISIBLE
+                }
+            }
         }
         binding.playPauseBtn.setOnClickListener {
             if (isPlaying) {
@@ -160,10 +185,21 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 musicArrayList.addAll(SongFragment.musicArrayList)
                 setLayout()
             }
+            "FavoriteAdapter"->{
+                musicArrayList = ArrayList()
+                musicArrayList.addAll(FavoriteFragment.favoriteList)
+                setLayout()
+            }
 
-            "SongFragment" -> {
+            "SongFragmentShuffle" -> {
                 musicArrayList = ArrayList()
                 musicArrayList.addAll(SongFragment.musicArrayList)
+                musicArrayList.shuffle()
+                setLayout()
+            }
+            "FavoriteFragmentShuffle" -> {
+                musicArrayList = ArrayList()
+                musicArrayList.addAll(FavoriteFragment.favoriteList)
                 musicArrayList.shuffle()
                 setLayout()
             }
@@ -194,6 +230,12 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     private fun setLayout() {
 
+        fIndex = Utils.favoriteChecker(musicArrayList[songPosition].id)
+        if(isFavorite){
+            binding.favoriteBtn.setImageResource(R.drawable.ic_favorite)
+        }else{
+            binding.favoriteBtn.setImageResource(R.drawable.ic_favorite_empty)
+        }
         try {
             Glide.with(this)
                 .load(musicArrayList[songPosition].artUri)
@@ -279,6 +321,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
+        Log.d("@@@@", "music service$musicService")
+
         musicService!!.seekBarSetup()
     }
 

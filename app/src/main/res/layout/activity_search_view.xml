@@ -11,9 +11,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:selectAllOnFocus="true"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:selectAllOnFocus="true">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -28,11 +28,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
+                android:id="@+id/search_backBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:id="@+id/search_backBtn"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_arrow_back"
                 app:tint="@color/white" />
@@ -41,28 +41,41 @@
                 android:id="@+id/search_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_regular"
                 android:layout_marginStart="5dp"
-                android:textSize="14sp"
-                android:selectAllOnFocus="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:padding="8dp"
-                android:maxLines="1"
+                android:fontFamily="@font/noto_regular"
                 android:hint="@string/search_your_music"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:selectAllOnFocus="true"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white">
+                android:textColorHint="@color/white"
+                android:textSize="14sp">
 
             </EditText>
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/noSearchFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/no_results"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scrollbars="vertical"
             android:scrollbarThumbVertical="@drawable/ic_recycler_scrollbar"
+            android:scrollbars="vertical"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

@@ -47,7 +47,7 @@ class SongFragment : Fragment() {
         binding.shuffleBtn.setOnClickListener {
             val intent = Intent(context, PlayerActivity::class.java)
             intent.putExtra("index",0)
-            intent.putExtra("class","SongFragment")
+            intent.putExtra("class","SongFragmentShuffle")
             context?.startActivity(intent)
         }
         return binding.root

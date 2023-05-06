@@ -46,6 +46,7 @@
         android:layout_toStartOf="@id/more"
         android:layout_marginTop="30dp"
         android:layout_marginStart="5dp"
+        android:weightSum="2"
         android:orientation="horizontal">
 
         <TextView
@@ -53,6 +54,9 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="12sp"
+            android:maxLines="1"
+            android:maxLength="30"
+            android:layout_weight="1"
             android:text="@string/song_album"
             android:textColor="@color/white" />
 
@@ -61,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="10sp"
+            android:layout_weight="1"
             android:layout_marginStart="10dp"
             android:text="@string/_00_00"
             android:textColor="@color/white"

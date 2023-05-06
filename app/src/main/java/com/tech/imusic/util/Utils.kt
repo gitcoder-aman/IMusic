@@ -2,6 +2,7 @@ package com.tech.imusic.util
 
 import android.media.MediaMetadataRetriever
 import com.tech.imusic.PlayerActivity
+import com.tech.imusic.fragments.FavoriteFragment
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
@@ -44,6 +45,16 @@ class Utils {
                 PlayerActivity.musicService = null
                 exitProcess(1)
             }
+        }
+        fun favoriteChecker(id:String):Int{
+            PlayerActivity.isFavorite = false
+            FavoriteFragment.favoriteList.forEachIndexed{index, music ->
+                if(id == music.id){
+                    PlayerActivity.isFavorite = true
+                    return index
+                }
+            }
+            return -1
         }
     }
 }

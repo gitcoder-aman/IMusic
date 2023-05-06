@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tech.imusic.adapter.MusicAdapter
@@ -53,7 +54,13 @@ class SearchViewActivity : AppCompatActivity() {
             if(song.album.lowercase().contains(searchText) || song.artist.lowercase().contains(searchText) || song.title.lowercase().contains(searchText)){
                 newFilteredList.add(song)
             }
-//            musicSearchAdapter?.filteringForSearch(newFilteredList)
+        }
+        if(newFilteredList.size < 1){
+            binding.noSearchFound.visibility = View.VISIBLE
+            binding.searchRecycler.visibility = View.INVISIBLE
+        }else{
+            binding.noSearchFound.visibility = View.INVISIBLE
+            binding.searchRecycler.visibility = View.VISIBLE
         }
         return newFilteredList
     }

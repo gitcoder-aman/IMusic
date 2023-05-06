@@ -87,5 +87,11 @@ class NotificationReceiver : BroadcastReceiver() {
         PlayerActivity.binding.songName.text = PlayerActivity.musicArrayList[PlayerActivity.songPosition].title
 
         playMusic()
+        PlayerActivity.fIndex = Utils.favoriteChecker(PlayerActivity.musicArrayList[PlayerActivity.songPosition].id)
+        if(PlayerActivity.isFavorite){
+            PlayerActivity.binding.favoriteBtn.setImageResource(R.drawable.ic_favorite)
+        }else{
+            PlayerActivity.binding.favoriteBtn.setImageResource(R.drawable.ic_favorite_empty)
+        }
     }
 }

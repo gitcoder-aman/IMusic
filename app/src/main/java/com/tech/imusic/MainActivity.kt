@@ -1,10 +1,15 @@
 package com.tech.imusic
 
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -12,11 +17,20 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.tech.imusic.adapter.FragmentsAdapter
 import com.tech.imusic.databinding.ActivityMainBinding
+import com.tech.imusic.fragments.FavoriteFragment
+import com.tech.imusic.fragments.NowPlayingFragment
+import com.tech.imusic.fragments.SongFragment
+import com.tech.imusic.model.Music
+import com.tech.imusic.services.MusicService
 import com.tech.imusic.util.Utils
 
 
@@ -26,7 +40,7 @@ val tabArray = arrayOf(
     "Playlist"
 )
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),ServiceConnection {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewPager2: ViewPager2
@@ -46,7 +60,37 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         requestRuntimePermission()
+
         setContentView(binding.root)
+
+        val intent = Intent(this, MusicService::class.java)
+        bindService(intent, this, BIND_AUTO_CREATE)
+        startService(intent)
+
+        FavoriteFragment.favoriteList = ArrayList()
+        //for retrieve favorites data using shared preferences
+        val editor = getSharedPreferences("FAVORITES", MODE_PRIVATE)
+        val jsonString = editor.getString("FavoriteSongs",null)
+        val typeToken = object:TypeToken<ArrayList<Music>>(){}.type
+
+        if(jsonString != null){
+            val data :ArrayList<Music> = GsonBuilder().create().fromJson(jsonString,typeToken)
+            FavoriteFragment.favoriteList.addAll(data)
+        }
+        Log.d("@@@@","size of favorite "+FavoriteFragment.favoriteList.size)
+
+        //for retrieve last Playing song data using shared preferences
+    /*    PlayerActivity.musicArrayList = ArrayList()
+        val ed = getSharedPreferences("NOW_PLAYING_SONG", MODE_PRIVATE)
+        val json = ed.getString("NowPlayingSong",null)
+        val typeToken1 = object: TypeToken<ArrayList<Music>>(){}.type
+
+        if(json != null){
+            val data :ArrayList<Music> = GsonBuilder().create().fromJson(json,typeToken1)
+            Log.d("@@@@", "data$data")
+            PlayerActivity.musicArrayList.addAll(data)
+        }
+        Log.d("@@@@","size of Player "+PlayerActivity.musicArrayList.size) */
 
         toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
         toolbar = findViewById(R.id.toolbar)
@@ -134,6 +178,23 @@ class MainActivity : AppCompatActivity() {
         if (!PlayerActivity.isPlaying && PlayerActivity.musicService != null) {
             Utils.exitApplication()
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //for storing favorites data using shared preferences
+        val editor = getSharedPreferences("FAVORITES", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavoriteFragment.favoriteList)
+        editor.putString("FavoriteSongs",jsonString)
+        editor.apply()
+
+        //for storing nowPlaying data using shared preferences
+      /*  val editor1 = getSharedPreferences("NOW_PLAYING_SONG", MODE_PRIVATE).edit()
+        val jsonString1 = GsonBuilder().create().toJson(SongFragment.musicArrayList)
+        editor1.putString("NowPlayingSong",jsonString1)
+        editor1.apply()
+        Log.d("@@@@","Destroy"+SongFragment.musicArrayList.toString())  */
     }
 
     fun alertDialog() {
@@ -148,5 +209,17 @@ class MainActivity : AppCompatActivity() {
             }
         val customDialog = builder.create()
         customDialog.show()
+    }
+
+    override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
+        val binder = service as MusicService.MyBinder
+        PlayerActivity.musicService = binder.currentService()
+
+        Log.d("@@@@",PlayerActivity.musicService.toString())
+
+    }
+
+    override fun onServiceDisconnected(p0: ComponentName?) {
+        PlayerActivity.musicService = null
     }
 }
