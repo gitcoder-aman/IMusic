@@ -31,6 +31,7 @@ import com.tech.imusic.model.Music
 import com.tech.imusic.databinding.ActivityPlayerBinding
 import com.tech.imusic.fragments.FavoriteFragment
 import com.tech.imusic.fragments.NowPlayingFragment
+import com.tech.imusic.fragments.PlaylistFragment
 import com.tech.imusic.services.MusicService
 import com.tech.imusic.util.Utils
 
@@ -201,6 +202,17 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 musicArrayList = ArrayList()
                 musicArrayList.addAll(FavoriteFragment.favoriteList)
                 musicArrayList.shuffle()
+                setLayout()
+            }
+            "PlaylistShuffle" -> {
+                musicArrayList = ArrayList()
+                musicArrayList.addAll(PlaylistDetailActivity.playlistList)
+                musicArrayList.shuffle()
+                setLayout()
+            }
+            "PlaylistDetailsAdapter" -> {
+                musicArrayList = ArrayList()
+                musicArrayList.addAll(PlaylistFragment.musicPlaylist.ref[PlaylistDetailActivity.currentPlaylistPos].playlist)
                 setLayout()
             }
 

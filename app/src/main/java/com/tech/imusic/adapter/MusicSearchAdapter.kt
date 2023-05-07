@@ -41,10 +41,17 @@ class MusicSearchAdapter(val context: Context, var musicArraylist: ArrayList<Mus
             .into(holder.songImage!!)
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra("index",position)
-            intent.putExtra("class","MusicSearchAdapter")
-            context.startActivity(intent)
+            if(musicArraylist[position].id == PlayerActivity.nowPlayingId){
+                val intent = Intent(context, PlayerActivity::class.java)
+                intent.putExtra("index", PlayerActivity.songPosition)
+                intent.putExtra("class", "NowPlaying")
+                context.startActivity(intent)
+            }else{
+                val intent = Intent(context, PlayerActivity::class.java)
+                intent.putExtra("index",position)
+                intent.putExtra("class","MusicSearchAdapter")
+                context.startActivity(intent)
+            }
         }
     }
 

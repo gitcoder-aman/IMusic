@@ -15,7 +15,11 @@ import com.tech.imusic.R
 import com.tech.imusic.model.Music
 import com.tech.imusic.util.Utils
 
-class MusicAdapter(val context: Context, private var musicArraylist: ArrayList<Music>) :
+class MusicAdapter(
+    val context: Context,
+    private var musicArraylist: ArrayList<Music>,
+    private var playlistDetail: Boolean = false
+) :
     RecyclerView.Adapter<MusicAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicAdapter.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.music_view_layout, parent, false)
@@ -39,14 +43,22 @@ class MusicAdapter(val context: Context, private var musicArraylist: ArrayList<M
             )
             .into(holder.songImage!!)
 
-        holder.itemView.setOnClickListener {
+        if (playlistDetail) {
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, PlayerActivity::class.java)
+                intent.putExtra("index", position)
+                intent.putExtra("class", "PlaylistDetailsAdapter")
+                context.startActivity(intent)
+            }
+        } else {
+            holder.itemView.setOnClickListener {
 
-            if(musicArraylist[position].id == PlayerActivity.nowPlayingId){
+            if (musicArraylist[position].id == PlayerActivity.nowPlayingId) {
                 val intent = Intent(context, PlayerActivity::class.java)
                 intent.putExtra("index", PlayerActivity.songPosition)
                 intent.putExtra("class", "NowPlaying")
                 context.startActivity(intent)
-            }else {
+            } else {
                 val intent = Intent(context, PlayerActivity::class.java)
                 intent.putExtra("index", position)
                 intent.putExtra("class", "MusicAdapter")
@@ -54,23 +66,24 @@ class MusicAdapter(val context: Context, private var musicArraylist: ArrayList<M
             }
         }
     }
+}
 
-    override fun getItemCount(): Int {
-        return musicArraylist.size
+override fun getItemCount(): Int {
+    return musicArraylist.size
+}
+
+class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var songName: TextView? = null
+    var songAlbumName: TextView? = null
+    var songImage: ImageView? = null
+    var songDuration: TextView? = null
+
+    init {
+        songName = itemView.findViewById(R.id.song_name)
+        songAlbumName = itemView.findViewById(R.id.song_album)
+        songDuration = itemView.findViewById(R.id.song_duration)
+        songImage = itemView.findViewById(R.id.imageMV)
     }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var songName: TextView? = null
-        var songAlbumName: TextView? = null
-        var songImage: ImageView? = null
-        var songDuration: TextView? = null
-
-        init {
-            songName = itemView.findViewById(R.id.song_name)
-            songAlbumName = itemView.findViewById(R.id.song_album)
-            songDuration = itemView.findViewById(R.id.song_duration)
-            songImage = itemView.findViewById(R.id.imageMV)
-        }
-    }
+}
 
 }

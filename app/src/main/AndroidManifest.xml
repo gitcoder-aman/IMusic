@@ -20,6 +20,11 @@
         android:theme="@style/Theme.IMusic"
         tools:targetApi="31">
         <activity
+            android:name=".PlaylistDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".SearchViewActivity"
             android:exported="false" />
         <activity
@@ -42,6 +47,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"
             tools:ignore="LockedOrientationActivity">
 
         </activity>
