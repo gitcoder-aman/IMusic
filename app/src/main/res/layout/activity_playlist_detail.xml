@@ -75,9 +75,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPlaylistPD"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:scrollbarThumbVertical="@drawable/ic_recycler_scrollbar"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBtnLL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

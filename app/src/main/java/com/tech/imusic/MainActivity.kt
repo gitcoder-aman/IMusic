@@ -40,7 +40,7 @@ val tabArray = arrayOf(
     "Playlist"
 )
 
-class MainActivity : AppCompatActivity(),ServiceConnection {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewPager2: ViewPager2
@@ -54,6 +54,9 @@ class MainActivity : AppCompatActivity(),ServiceConnection {
         R.drawable.ic_favorite,
         R.drawable.ic_playlist
     )
+    companion object{
+        var favoriteListDataSharedPref : ArrayList<Music> = ArrayList()
+    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,9 +66,9 @@ class MainActivity : AppCompatActivity(),ServiceConnection {
 
         setContentView(binding.root)
 
-        val intent = Intent(this, MusicService::class.java)
-        bindService(intent, this, BIND_AUTO_CREATE)
-        startService(intent)
+//        val intent = Intent(this, MusicService::class.java)
+//        bindService(intent, this, BIND_AUTO_CREATE)
+//        startService(intent)
 
         FavoriteFragment.favoriteList = ArrayList()
         //for retrieve favorites data using shared preferences
@@ -74,8 +77,8 @@ class MainActivity : AppCompatActivity(),ServiceConnection {
         val typeToken = object:TypeToken<ArrayList<Music>>(){}.type
 
         if(jsonString != null){
-            val data :ArrayList<Music> = GsonBuilder().create().fromJson(jsonString,typeToken)
-            FavoriteFragment.favoriteList.addAll(data)
+            favoriteListDataSharedPref  = GsonBuilder().create().fromJson(jsonString,typeToken)
+            FavoriteFragment.favoriteList.addAll(favoriteListDataSharedPref)
         }
         Log.d("@@@@","size of favorite "+FavoriteFragment.favoriteList.size)
 
@@ -211,15 +214,15 @@ class MainActivity : AppCompatActivity(),ServiceConnection {
         customDialog.show()
     }
 
-    override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
-        val binder = service as MusicService.MyBinder
-        PlayerActivity.musicService = binder.currentService()
-
-        Log.d("@@@@",PlayerActivity.musicService.toString())
-
-    }
-
-    override fun onServiceDisconnected(p0: ComponentName?) {
-        PlayerActivity.musicService = null
-    }
+//    override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
+//        val binder = service as MusicService.MyBinder
+//        PlayerActivity.musicService = binder.currentService()
+//
+//        Log.d("@@@@",PlayerActivity.musicService.toString())
+//
+//    }
+//
+//    override fun onServiceDisconnected(p0: ComponentName?) {
+//        PlayerActivity.musicService = null
+//    }
 }

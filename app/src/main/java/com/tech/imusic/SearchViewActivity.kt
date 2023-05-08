@@ -5,19 +5,16 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tech.imusic.adapter.MusicAdapter
-import com.tech.imusic.adapter.MusicSearchAdapter
 import com.tech.imusic.databinding.ActivitySearchViewBinding
 import com.tech.imusic.fragments.SongFragment
 import com.tech.imusic.model.Music
-import java.util.Locale
 
 class SearchViewActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivitySearchViewBinding
-    private  var musicSearchAdapter: MusicSearchAdapter ?= null
+    private  var musicSearchAdapter: MusicAdapter ?= null
 
     companion object{
         var filteredMusic = ArrayList<Music>()
@@ -39,7 +36,9 @@ class SearchViewActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val searchText = p0.toString().trim()
                 filteredMusic = musicFiltering(searchText)
-                musicSearchAdapter = MusicSearchAdapter(this@SearchViewActivity,filteredMusic)
+                musicSearchAdapter = MusicAdapter(this@SearchViewActivity,filteredMusic,false,
+                    searchingViewActivity = true,
+                    playlistSelectionActivity = false)
                 binding.searchRecycler.adapter = musicSearchAdapter
             }
 

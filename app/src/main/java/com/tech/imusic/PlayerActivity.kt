@@ -216,7 +216,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 setLayout()
             }
 
-            "MusicSearchAdapter" -> {
+            "MusicSearchViewActivity" -> {
                 musicArrayList = ArrayList()
                 musicArrayList.addAll(SearchViewActivity.filteredMusic)
                 setLayout()
@@ -333,7 +333,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
-        Log.d("@@@@", "music service$musicService")
+//        Log.d("@@@@", "music service$musicService")
 
         musicService!!.seekBarSetup()
     }

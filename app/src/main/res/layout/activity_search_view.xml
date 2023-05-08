@@ -19,7 +19,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/light_endColor"
+            android:background="@color/endColor"
             android:orientation="horizontal"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,10 +47,16 @@
                 android:fontFamily="@font/noto_regular"
                 android:hint="@string/search_your_music"
                 android:maxLines="1"
-                android:padding="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="8dp"
+                android:background="@drawable/custom_search_view"
                 android:selectAllOnFocus="true"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:textColorHint="@color/grey"
                 android:textSize="14sp">
 
             </EditText>

@@ -23,8 +23,6 @@ class PlaylistFragment : Fragment() {
 
     private lateinit var binding: FragmentPlaylistBinding
     private lateinit var adapter : PlaylistAdapter
-//    private  var playlistList:ArrayList<Playlist> = ArrayList()
-
     companion object{
         var musicPlaylist = MusicPlaylist()
     }
@@ -46,6 +44,7 @@ class PlaylistFragment : Fragment() {
         binding.playlistAddBtn.setOnClickListener {
             customAlertDialog()
         }
+
         return binding.root
     }
 
@@ -91,6 +90,11 @@ class PlaylistFragment : Fragment() {
             musicPlaylist.ref.add(tempPlaylist)
             adapter.refreshPlaylist()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
     }
 
 }
