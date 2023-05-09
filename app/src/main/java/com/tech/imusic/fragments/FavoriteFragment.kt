@@ -15,6 +15,7 @@ import com.tech.imusic.adapter.FavoriteAdapter
 import com.tech.imusic.adapter.MusicAdapter
 import com.tech.imusic.databinding.FragmentFavoriteBinding
 import com.tech.imusic.model.Music
+import com.tech.imusic.util.Utils
 
 class FavoriteFragment : Fragment() {
 
@@ -32,6 +33,7 @@ class FavoriteFragment : Fragment() {
         // Inflate the layout for this fragment
         binding =  FragmentFavoriteBinding.inflate(layoutInflater, container, false)
 
+        favoriteList = Utils.checkMusicListExitORNotInFILE(favoriteList)
         binding!!.recyclerFavorite.layoutManager = GridLayoutManager(activity,4)
 
         adapter = FavoriteAdapter(requireActivity(), favoriteList)

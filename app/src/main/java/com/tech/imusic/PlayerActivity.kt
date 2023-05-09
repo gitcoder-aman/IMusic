@@ -3,8 +3,10 @@ package com.tech.imusic
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
 import android.net.Uri
@@ -333,9 +335,11 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
-//        Log.d("@@@@", "music service$musicService")
-
         musicService!!.seekBarSetup()
+
+        //for Handling Calls & Other Audio Changes
+        musicService!!.audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        musicService!!.audioManager.requestAudioFocus(musicService,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN)
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {

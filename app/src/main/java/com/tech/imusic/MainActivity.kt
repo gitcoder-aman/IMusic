@@ -28,8 +28,10 @@ import com.tech.imusic.adapter.FragmentsAdapter
 import com.tech.imusic.databinding.ActivityMainBinding
 import com.tech.imusic.fragments.FavoriteFragment
 import com.tech.imusic.fragments.NowPlayingFragment
+import com.tech.imusic.fragments.PlaylistFragment
 import com.tech.imusic.fragments.SongFragment
 import com.tech.imusic.model.Music
+import com.tech.imusic.model.MusicPlaylist
 import com.tech.imusic.services.MusicService
 import com.tech.imusic.util.Utils
 
@@ -54,9 +56,6 @@ class MainActivity : AppCompatActivity() {
         R.drawable.ic_favorite,
         R.drawable.ic_playlist
     )
-    companion object{
-        var favoriteListDataSharedPref : ArrayList<Music> = ArrayList()
-    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,15 +71,22 @@ class MainActivity : AppCompatActivity() {
 
         FavoriteFragment.favoriteList = ArrayList()
         //for retrieve favorites data using shared preferences
-        val editor = getSharedPreferences("FAVORITES", MODE_PRIVATE)
+        val editor = getSharedPreferences("FAVORITES_PLAYLIST", MODE_PRIVATE)
         val jsonString = editor.getString("FavoriteSongs",null)
         val typeToken = object:TypeToken<ArrayList<Music>>(){}.type
 
         if(jsonString != null){
-            favoriteListDataSharedPref  = GsonBuilder().create().fromJson(jsonString,typeToken)
+            val favoriteListDataSharedPref : ArrayList<Music>  = GsonBuilder().create().fromJson(jsonString,typeToken)
             FavoriteFragment.favoriteList.addAll(favoriteListDataSharedPref)
         }
-        Log.d("@@@@","size of favorite "+FavoriteFragment.favoriteList.size)
+        PlaylistFragment.musicPlaylist = MusicPlaylist()
+        //for retrieve favorites data using shared preferences
+        val jsonStringPlaylist = editor.getString("MusicPlaylist",null)
+
+        if(jsonStringPlaylist != null){
+            val playlistListDataSharedPref : MusicPlaylist  = GsonBuilder().create().fromJson(jsonStringPlaylist,MusicPlaylist::class.java)
+            PlaylistFragment.musicPlaylist = playlistListDataSharedPref
+        }
 
         //for retrieve last Playing song data using shared preferences
     /*    PlayerActivity.musicArrayList = ArrayList()
@@ -121,9 +127,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.navigationView.setNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.menu_feedback -> alertDialog()
+                R.id.menu_feedback -> Toast.makeText(baseContext, "Feedback", Toast.LENGTH_SHORT).show()
                 R.id.menu_setting -> Toast.makeText(baseContext, "Setting", Toast.LENGTH_SHORT).show()
-                R.id.menu_about -> Toast.makeText(baseContext, "Setting", Toast.LENGTH_SHORT).show()
+                R.id.menu_about -> startActivity(Intent(baseContext,AboutActivity::class.java))
                 R.id.menu_developer -> Toast.makeText(baseContext, "developer", Toast.LENGTH_SHORT).show()
             }
             true
@@ -187,9 +193,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         //for storing favorites data using shared preferences
-        val editor = getSharedPreferences("FAVORITES", MODE_PRIVATE).edit()
+        val editor = getSharedPreferences("FAVORITES_PLAYLIST", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavoriteFragment.favoriteList)
         editor.putString("FavoriteSongs",jsonString)
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistFragment.musicPlaylist)
+        editor.putString("MusicPlaylist",jsonStringPlaylist)
         editor.apply()
 
         //for storing nowPlaying data using shared preferences
@@ -198,20 +206,6 @@ class MainActivity : AppCompatActivity() {
         editor1.putString("NowPlayingSong",jsonString1)
         editor1.apply()
         Log.d("@@@@","Destroy"+SongFragment.musicArrayList.toString())  */
-    }
-
-    fun alertDialog() {
-        val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle("Execute")
-            .setMessage("Do you want to close app?")
-            .setPositiveButton("Yes") { _, _ ->
-                Utils.exitApplication()
-            }
-            .setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-            }
-        val customDialog = builder.create()
-        customDialog.show()
     }
 
 //    override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {

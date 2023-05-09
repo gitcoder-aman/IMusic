@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 import com.tech.imusic.adapter.MusicAdapter
 import com.tech.imusic.databinding.ActivityPlaylistDetailBinding
+import com.tech.imusic.fragments.FavoriteFragment
 import com.tech.imusic.fragments.PlaylistFragment
 import com.tech.imusic.model.Music
+import com.tech.imusic.model.MusicPlaylist
+import com.tech.imusic.util.Utils
 
 class PlaylistDetailActivity : AppCompatActivity() {
 
@@ -30,6 +34,7 @@ class PlaylistDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         currentPlaylistPos = intent.extras?.getInt("index")!!
+        PlaylistFragment.musicPlaylist.ref[currentPlaylistPos].playlist = Utils.checkMusicListExitORNotInFILE(playlist = PlaylistFragment.musicPlaylist.ref[currentPlaylistPos].playlist)
 
         binding.recyclerPlaylistPD.setItemViewCacheSize(10)
         binding.recyclerPlaylistPD.setHasFixedSize(true)
@@ -92,6 +97,14 @@ class PlaylistDetailActivity : AppCompatActivity() {
         }
         //update the playlist after add the music
         adapter.notifyDataSetChanged()
-        playlistList.addAll(PlaylistFragment.musicPlaylist.ref[currentPlaylistPos].playlist)
+        //for shuffle
+        playlistList.addAll(PlaylistFragment.musicPlaylist.ref[currentPlaylistPos].playlist) //all the add playlist after selecting from playlist detail
+
+        //all save playlist data after close at Playlist detail activity
+
+        val editor = getSharedPreferences("FAVORITES_PLAYLIST", MODE_PRIVATE).edit()
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistFragment.musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
     }
 }

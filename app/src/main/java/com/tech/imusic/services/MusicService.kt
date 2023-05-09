@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Handler
@@ -11,17 +12,20 @@ import android.os.IBinder
 import android.os.Looper
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
+import com.tech.imusic.MainActivity
 import com.tech.imusic.PlayerActivity
 import com.tech.imusic.R
 import com.tech.imusic.application.ApplicationClass
+import com.tech.imusic.fragments.NowPlayingFragment
 import com.tech.imusic.util.Utils
 
-class MusicService : Service() {
+class MusicService : Service(),AudioManager.OnAudioFocusChangeListener {
 
     private var myBinder = MyBinder()
     var mediaPlayer: MediaPlayer? = null
     private lateinit var mediaSession:MediaSessionCompat
     private lateinit var runnable:Runnable
+     lateinit var audioManager: AudioManager
 
     override fun onBind(p0: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext,"My Music")
@@ -35,6 +39,9 @@ class MusicService : Service() {
     }
 
     fun showNotification(playPauseBtn:Int) {
+
+        val intent = Intent(baseContext,MainActivity::class.java) //click on notification
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val prevIntent = Intent(baseContext,NotificationReceiver::class.java).setAction(ApplicationClass.PREVIOUS)
         val prevPendingIntent = PendingIntent.getBroadcast(baseContext,0,prevIntent,PendingIntent.FLAG_UPDATE_CURRENT)
@@ -59,6 +66,7 @@ class MusicService : Service() {
             .setContentTitle(PlayerActivity.musicArrayList[PlayerActivity.songPosition].title)
             .setContentText(PlayerActivity.musicArrayList[PlayerActivity.songPosition].artist)
             .setSmallIcon(R.drawable.ic_song)
+            .setContentIntent(pendingIntent)
             .setLargeIcon(image)
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -102,5 +110,25 @@ class MusicService : Service() {
             Handler(Looper.getMainLooper()).postDelayed(runnable,200)
         }
         Handler(Looper.getMainLooper()).postDelayed(runnable,0)
+    }
+
+    override fun onAudioFocusChange(focusChange: Int) {
+        if(focusChange <= 0){
+            //pause music
+            PlayerActivity.binding.playPauseBtn.setIconResource(R.drawable.ic_play)
+            NowPlayingFragment.binding.playPauseBtnFrag.setIconResource(R.drawable.ic_play)
+            PlayerActivity.isPlaying = false
+            mediaPlayer!!.pause()
+            showNotification(R.drawable.ic_play_notification)
+            PlayerActivity.binding.lottieAnimationView.pauseAnimation()
+        }else{
+            //play music
+            PlayerActivity.binding.playPauseBtn.setIconResource(R.drawable.ic_pause)
+            NowPlayingFragment.binding.playPauseBtnFrag.setIconResource(R.drawable.ic_pause)
+            PlayerActivity.isPlaying = true
+            mediaPlayer!!.start()
+            showNotification(R.drawable.ic_pause_notification)
+            PlayerActivity.binding.lottieAnimationView.playAnimation()
+        }
     }
 }

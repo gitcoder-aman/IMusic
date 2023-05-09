@@ -52,6 +52,7 @@ class PlaylistAdapter(val context: Context, private var playlistList: ArrayList<
             builder.setTitle(playlistList[position].playListName)
                 .setMessage("Do you want to delete this Playlist?")
                 .setPositiveButton("Yes") { dialog, _ ->
+
                     PlaylistFragment.musicPlaylist.ref.removeAt(position)
                     refreshPlaylist()
                     dialog.dismiss()

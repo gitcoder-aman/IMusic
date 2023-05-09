@@ -36,4 +36,9 @@
     <string name="delete">delete</string>
     <string name="your_name">Your Name</string>
     <string name="search">Search</string>
+    <string name="app_version">1.0</string>
+    <string name="developed_and_designed_by">Developed and Designed by</string>
+    <string name="aman_kumar">Aman Kumar</string>
+    <string name="insta_id">coder.aman</string>
+    <string name="linkedin_id">aman-kumar-4aaa631b5</string>
 </resources>
