@@ -56,7 +56,8 @@
                             android:layout_height="150dp"
                             android:padding="10dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/music_listener_image" />
+                            android:src="@drawable/music_listener_image"
+                            android:contentDescription="@string/song_img" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -103,7 +104,8 @@
                                     app:layout_constraintHorizontal_bias="0.5"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_bias="0.5" />
+                                    app:layout_constraintVertical_bias="0.5"
+                                    android:contentDescription="@string/song_img" />
 
                                 <ImageView
                                     android:id="@+id/termConditionBtn"
@@ -119,7 +121,8 @@
                                     app:layout_constraintHorizontal_bias="0.5"
                                     app:layout_constraintStart_toEndOf="@+id/playStoreBtn"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_bias="0.5" />
+                                    app:layout_constraintVertical_bias="0.5"
+                                    android:contentDescription="@string/song_img" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -130,7 +133,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="20dp"
@@ -144,7 +147,12 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="300dp">
+                    android:layout_height="300dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout"
@@ -153,8 +161,7 @@
                         android:layout_marginTop="60dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
@@ -168,24 +175,28 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.5">
 
-                            <LinearLayout
+                            <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:layout_height="match_parent"
+                                android:padding="10dp">
 
                                 <TextView
+                                    android:id="@+id/textView3"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
+                                    android:layout_marginBottom="10dp"
                                     android:fontFamily="@font/noto_regular"
                                     android:gravity="center"
                                     android:text="@string/developed_and_designed_by"
                                     android:textColor="@color/white"
-                                    android:textSize="14sp" />
+                                    android:textSize="14sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/textView4"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
 
                                 <TextView
+                                    android:id="@+id/textView4"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -194,12 +205,19 @@
                                     android:text="@string/aman_kumar"
                                     android:textColor="@color/white"
                                     android:textSize="16sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+                                    app:layout_constraintEnd_toEndOf="@+id/textView3"
+                                    app:layout_constraintStart_toStartOf="@+id/textView3" />
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/constraintLayout2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center">
+                                    android:layout_gravity="center"
+                                    app:layout_constraintBottom_toTopOf="@+id/textView2"
+                                    app:layout_constraintEnd_toEndOf="@+id/textView4"
+                                    app:layout_constraintStart_toStartOf="@+id/textView4">
 
                                     <ImageView
                                         android:id="@+id/instagramBtn"
@@ -215,7 +233,9 @@
                                         app:layout_constraintHorizontal_bias="0.5"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
-                                        app:layout_constraintVertical_bias="0.5" />
+                                        app:layout_constraintVertical_bias="0.5"
+                                        android:contentDescription="@string/song_img"
+                                        tools:ignore="TooDeepLayout" />
 
                                     <ImageView
                                         android:id="@+id/linkedinBtn"
@@ -231,7 +251,8 @@
                                         app:layout_constraintHorizontal_bias="0.5"
                                         app:layout_constraintStart_toEndOf="@+id/instagramBtn"
                                         app:layout_constraintTop_toTopOf="parent"
-                                        app:layout_constraintVertical_bias="0.5" />
+                                        app:layout_constraintVertical_bias="0.5"
+                                        android:contentDescription="@string/song_img" />
 
                                     <ImageView
                                         android:id="@+id/githubBtn"
@@ -247,12 +268,27 @@
                                         app:layout_constraintHorizontal_bias="0.5"
                                         app:layout_constraintStart_toEndOf="@+id/linkedinBtn"
                                         app:layout_constraintTop_toTopOf="parent"
-                                        app:layout_constraintVertical_bias="0.5" />
+                                        app:layout_constraintVertical_bias="0.5"
+                                        android:contentDescription="@string/song_img" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                                <TextView
+                                    android:id="@+id/textView2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/noto_regular"
+                                    android:gravity="center"
+                                    android:text="@string/music_quote"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:textStyle="italic"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+                                    app:layout_constraintStart_toStartOf="@+id/constraintLayout2" />
 
-                            </LinearLayout>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                         </com.google.android.material.card.MaterialCardView>
@@ -261,9 +297,8 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profile_image"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:padding="8dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@drawable/person"
                         app:civ_border_color="@color/white"
                         app:civ_border_width="2dp"
@@ -273,7 +308,8 @@
                         app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

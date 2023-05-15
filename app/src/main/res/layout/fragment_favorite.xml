@@ -33,5 +33,4 @@
         app:strokeColor="@color/blueColor"
         app:strokeWidth="2dp" />
 
-
 </RelativeLayout>

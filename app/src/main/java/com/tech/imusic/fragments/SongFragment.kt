@@ -22,7 +22,7 @@ class SongFragment : Fragment() {
     companion object {
         var musicArrayList: ArrayList<Music> = ArrayList()
         @SuppressLint("StaticFieldLeak")
-        lateinit var musicAdapter:MusicAdapter
+         var musicAdapter:MusicAdapter ?= null
     }
 
     @SuppressLint("SetTextI18n")
@@ -42,7 +42,7 @@ class SongFragment : Fragment() {
 
         binding.musicRecycler.setHasFixedSize(true)
         binding.musicRecycler.setItemViewCacheSize(13)
-        binding.totalSong.text = "Total Songs: "+musicAdapter.itemCount
+        binding.totalSong.text = "Total Songs: "+ musicAdapter!!.itemCount
 
         binding.shuffleBtn.setOnClickListener {
             val intent = Intent(context, PlayerActivity::class.java)

@@ -9,7 +9,7 @@ data class Music(
     val path : String,
     val artUri : String
 )
-class Playlist{
+class Playlist{  // only model
     lateinit var playListName : String
     lateinit var playlist: ArrayList<Music>
     lateinit var createdBy : String

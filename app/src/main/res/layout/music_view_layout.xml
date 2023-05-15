@@ -24,9 +24,20 @@
         android:gravity="start|center"
         android:layout_toEndOf="@id/imageMV"
         android:textColor="@color/white"
-        android:lines="1"
+        android:layout_toStartOf="@id/music_small_lottieView"
+        android:layout_marginStart="5dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/music_small_lottieView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/music_small"
         android:layout_toStartOf="@id/more"
-        android:layout_marginStart="5dp"/>
+        android:gravity="center_vertical" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -35,15 +46,15 @@
         android:src="@drawable/ic_more"
         android:layout_alignParentEnd="true"
         android:gravity="center"
-        android:layout_marginHorizontal="5dp"
         android:textColor="@color/white"
-        android:id="@+id/more"/>
+        android:id="@+id/more"
+        android:contentDescription="@string/song_img" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_toEndOf="@id/imageMV"
-        android:layout_toStartOf="@id/more"
+        android:layout_toStartOf="@id/music_small_lottieView"
         android:layout_marginTop="30dp"
         android:layout_marginStart="5dp"
         android:weightSum="2"
@@ -51,7 +62,7 @@
 
         <TextView
             android:id="@+id/song_album"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="20dp"
             android:textSize="12sp"
             android:maxLines="1"
@@ -65,7 +76,6 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="10sp"
-            android:layout_weight="1"
             android:layout_marginStart="10dp"
             android:text="@string/_00_00"
             android:textColor="@color/white"

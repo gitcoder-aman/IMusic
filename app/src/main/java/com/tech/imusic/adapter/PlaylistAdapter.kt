@@ -1,18 +1,22 @@
 package com.tech.imusic.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 import com.tech.imusic.PlayerActivity
 import com.tech.imusic.PlaylistDetailActivity
 import com.tech.imusic.R
@@ -54,6 +58,10 @@ class PlaylistAdapter(val context: Context, private var playlistList: ArrayList<
                 .setPositiveButton("Yes") { dialog, _ ->
 
                     PlaylistFragment.musicPlaylist.ref.removeAt(position)
+                    //all save playlist data after close at Playlist detail activity
+
+                    Utils.sharedPrefPlaylist(context)  //update data of sharedPreference after delete a playlist
+
                     refreshPlaylist()
                     dialog.dismiss()
                 }
@@ -73,6 +81,7 @@ class PlaylistAdapter(val context: Context, private var playlistList: ArrayList<
     override fun getItemCount(): Int {
         return playlistList.size
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun refreshPlaylist(){
         playlistList = ArrayList()
         playlistList.addAll(PlaylistFragment.musicPlaylist.ref)

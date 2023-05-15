@@ -10,7 +10,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -21,26 +20,25 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import com.tech.imusic.fragments.SongFragment
-import com.tech.imusic.model.Music
 import com.tech.imusic.databinding.ActivityPlayerBinding
 import com.tech.imusic.fragments.FavoriteFragment
 import com.tech.imusic.fragments.NowPlayingFragment
 import com.tech.imusic.fragments.PlaylistFragment
+import com.tech.imusic.fragments.SongFragment
+import com.tech.imusic.model.Music
 import com.tech.imusic.services.MusicService
 import com.tech.imusic.util.Utils
 
 class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
 
     private var AUDIO_TYPE = "audio/*"
-    private var classIntentString:String ?= null
+    private var classIntentString:String ?= ""
     companion object {
         var songPosition: Int = 0
         var musicArrayList: ArrayList<Music> = ArrayList()
@@ -72,6 +70,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             startService(intent)
         }
         initializeLayout()
+
         binding.backBtn.setOnClickListener {
             finish()
         }
@@ -173,6 +172,45 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             startActivity(Intent.createChooser(shareIntent, "Sharing Music File!!"))
         }
     }
+
+//    @SuppressLint("Recycle")
+//    private fun getMusicDetails(contentUri : Uri): Music {
+//
+//        var cursor:Cursor ?= null
+////        val selection = Media.IS_MUSIC + "!= 0"
+//        musicArrayList.clear()
+//
+//        try{
+//            val projection = arrayOf(Media.DATA,Media.DURATION)
+//             cursor = this.contentResolver.query(Media.EXTERNAL_CONTENT_URI,projection,null,null,null)
+//            val dataColumn = cursor?.getColumnIndexOrThrow(Media.DATA)
+//            val durationColumn = cursor?.getColumnIndexOrThrow(Media.DURATION)
+//
+////            if(cursor != null) {
+//                cursor!!.moveToFirst()
+//
+////                val path = cursor?.getString(cursor.getColumnIndexOrThrow(Media.DATA))
+////                val duration = cursor?.getLong(cursor.getColumnIndexOrThrow(Media.DURATION))
+//
+//            val path = dataColumn?.let { cursor?.getString(it) }
+//            val duration = durationColumn?.let { cursor?.getLong(it) }!!
+//
+//                Log.d("@@@@", path.toString())
+//                Log.d("@@@@", duration.toString())
+////            }
+//            return Music(
+//                "Unknown",
+//                path.toString(),
+//                "Unknown",
+//                "Unknown",
+//                20,
+//                "path.toString()",
+//                "Unknown"
+//            )
+//        }finally {
+//            cursor?.close()
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -281,8 +319,10 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             if (musicService!!.mediaPlayer == null)
                 musicService!!.mediaPlayer = MediaPlayer()
 
+
             musicService!!.mediaPlayer!!.reset()
             musicService!!.mediaPlayer!!.setDataSource(musicArrayList[songPosition].path)
+            Log.d("@@@@","path: ${musicArrayList[songPosition].path}")
             musicService!!.mediaPlayer!!.prepare()
             musicService!!.mediaPlayer!!.start()
             isPlaying = true
@@ -331,11 +371,14 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
         musicService!!.seekBarSetup()
+        SongFragment.musicAdapter!!.notifyDataSetChanged() // for text color change update so adapter notify
+        FavoriteFragment.adapter?.notifyDataSetChanged()
 
         //for Handling Calls & Other Audio Changes
         musicService!!.audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -420,5 +463,11 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if(musicArrayList[songPosition].id == "Unknown" && !isPlaying){
+            Utils.exitApplication()
+        }
+    }
 
 }

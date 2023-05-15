@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.tech.imusic.databinding.ActivityAboutBinding
+import com.tech.imusic.util.Utils
 
 
 class AboutActivity : AppCompatActivity() {
@@ -34,35 +35,10 @@ class AboutActivity : AppCompatActivity() {
         binding.aboutToolbar.navigationIcon = backArrow
 
         binding.instagramBtn.setOnClickListener {
-            val username = resources.getString(R.string.insta_id)
-            val uri = Uri.parse("http://instagram.com/_u/$username")
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.setPackage("com.instagram.android")
-
-// Check if Instagram app is installed
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                // Instagram app is not installed, open in browser
-                val browserIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(browserIntent)
-            }
+            Utils.instagramOpen(this)
         }
         binding.linkedinBtn.setOnClickListener {
-            val profileId = resources.getString(R.string.linkedin_id)
-            val intent = Intent(Intent.ACTION_VIEW)
-            val uri = Uri.parse("linkedin://profile/$profileId")
-            intent.data = uri
-            intent.setPackage("com.linkedin.android")
-
-// Check if LinkedIn app is installed
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                // LinkedIn app is not installed, open in browser
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/profile/view?id=$profileId"))
-                startActivity(browserIntent)
-            }
+            Utils.linkedinOpen(this)
         }
         binding.githubBtn.setOnClickListener {
             val url = "https://github.com/gitcoder-aman"

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -22,10 +23,16 @@ class FavoriteAdapter(val context: Context, private var musicArraylist: ArrayLis
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FavoriteAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model = musicArraylist[position]
 
         holder.songNameFV?.text = model.title
+
+        if(model.id == PlayerActivity.nowPlayingId){
+            changeTextColor(holder)
+        }else{
+            removeTextColor(holder)
+        }
 
         //music icon image
         Glide.with(context)
@@ -51,6 +58,14 @@ class FavoriteAdapter(val context: Context, private var musicArraylist: ArrayLis
                 context.startActivity(intent)
             }
         }
+    }
+    private fun removeTextColor(holder: ViewHolder) {
+        holder.songNameFV?.setTextColor(ContextCompat.getColor(context,R.color.white))
+        holder.songNameFV?.isSelected = false
+    }
+    private fun changeTextColor(holder: ViewHolder) {
+        holder.songNameFV?.setTextColor(ContextCompat.getColor(context,R.color.cool_Pink))
+        holder.songNameFV?.isSelected = true
     }
 
     override fun getItemCount(): Int {

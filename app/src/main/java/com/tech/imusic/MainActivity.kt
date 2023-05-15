@@ -1,38 +1,38 @@
 package com.tech.imusic
 
-import android.content.ComponentName
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
-import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
-import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
+import android.view.WindowManager
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.tech.imusic.adapter.FragmentsAdapter
 import com.tech.imusic.databinding.ActivityMainBinding
 import com.tech.imusic.fragments.FavoriteFragment
-import com.tech.imusic.fragments.NowPlayingFragment
 import com.tech.imusic.fragments.PlaylistFragment
-import com.tech.imusic.fragments.SongFragment
 import com.tech.imusic.model.Music
 import com.tech.imusic.model.MusicPlaylist
-import com.tech.imusic.services.MusicService
 import com.tech.imusic.util.Utils
 
 
@@ -51,19 +51,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var pagerAdapter: FragmentsAdapter
 
+    private var appUpdate: AppUpdateManager?= null
+    private val REQUEST_CODE = 100
+
     private val tabIcons = intArrayOf(
         R.drawable.ic_song,
         R.drawable.ic_favorite,
         R.drawable.ic_playlist
     )
 
+    @SuppressLint("QueryPermissionsNeeded")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         requestRuntimePermission()
+        adjustFontScale(resources.configuration)  //Lock font size of system setting
 
         setContentView(binding.root)
+
+        appUpdate = AppUpdateManagerFactory.create(this)
+        checkUpdate()
 
 //        val intent = Intent(this, MusicService::class.java)
 //        bindService(intent, this, BIND_AUTO_CREATE)
@@ -127,16 +135,79 @@ class MainActivity : AppCompatActivity() {
 
         binding.navigationView.setNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.menu_feedback -> Toast.makeText(baseContext, "Feedback", Toast.LENGTH_SHORT).show()
-                R.id.menu_setting -> Toast.makeText(baseContext, "Setting", Toast.LENGTH_SHORT).show()
+                R.id.menu_rate -> {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+this.packageName)))
+                }
+                R.id.menu_share ->{
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(
+                        Intent.EXTRA_TEXT, "IMusic - Free and unlimited Music app!\n" +
+                                "Get unlimited access to millions of music, curated playlists, and content from your favorite artists. This is the music app for you to listen to online and offline music." +
+                                "https://play.google.com/store/apps/details?id=" + this.packageName
+                    )
+                    sendIntent.type = "text/plain"
+
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    startActivity(shareIntent)
+                }
                 R.id.menu_about -> startActivity(Intent(baseContext,AboutActivity::class.java))
-                R.id.menu_developer -> Toast.makeText(baseContext, "developer", Toast.LENGTH_SHORT).show()
+                R.id.menu_developer -> {
+                    val popupMenu = PopupMenu(this, findViewById(R.id.menu_developer),Gravity.CENTER, R.style.MyPopupMenuStyle, 0)
+                    popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
+                    popupMenu.setOnMenuItemClickListener { popupMenuItem ->
+                        when (popupMenuItem.itemId) {
+                            R.id.instagram_item -> {
+                               Utils.instagramOpen(this)
+                                true
+                            }
+                            R.id.linkedin_item -> {
+                                Utils.linkedinOpen(this)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        popupMenu.setForceShowIcon(true)
+                    } // display icons
+                    popupMenu.show()
+                }
+                R.id.menu_feedback->{
+                    val builder = MaterialAlertDialogBuilder(this)
+                    builder.setTitle("Feedback")
+                    builder.setMessage("Want to Open Gmail app?")
+                        .setPositiveButton("Yes") { dialog, _ ->
+                            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                data = Uri.parse("mailto:aman.nittc@gmail.com")
+                            }
+                            startActivity(intent)
+                            dialog.dismiss()
+                        }.setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }.show()
+                }
             }
             true
         }
         binding.toolbar.setOnClickListener {
             val intent = Intent(this,SearchViewActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun checkUpdate() {
+        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo->
+            if(updateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && updateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
+                appUpdate?.startUpdateFlowForResult(updateInfo,AppUpdateType.IMMEDIATE,this,REQUEST_CODE)
+            }
+        }
+    }
+    private fun inProgressUpdate(){
+        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo->
+            if(updateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
+                appUpdate?.startUpdateFlowForResult(updateInfo,AppUpdateType.IMMEDIATE,this,REQUEST_CODE)
+            }
         }
     }
 
@@ -192,10 +263,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        inProgressUpdate()
+
         //for storing favorites data using shared preferences
         val editor = getSharedPreferences("FAVORITES_PLAYLIST", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavoriteFragment.favoriteList)
         editor.putString("FavoriteSongs",jsonString)
+
         val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistFragment.musicPlaylist)
         editor.putString("MusicPlaylist",jsonStringPlaylist)
         editor.apply()
@@ -207,6 +281,15 @@ class MainActivity : AppCompatActivity() {
         editor1.apply()
         Log.d("@@@@","Destroy"+SongFragment.musicArrayList.toString())  */
     }
+    fun adjustFontScale(configuration: Configuration) {
+        configuration.fontScale = 1.0.toFloat()
+        val metrics = resources.displayMetrics
+        val wm = getSystemService(WINDOW_SERVICE) as WindowManager
+        wm.defaultDisplay.getMetrics(metrics)
+        metrics.scaledDensity = configuration.fontScale * metrics.density
+        baseContext.resources.updateConfiguration(configuration, metrics)
+    }
+
 
 //    override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
 //        val binder = service as MusicService.MyBinder

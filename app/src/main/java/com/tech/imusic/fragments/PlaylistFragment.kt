@@ -1,18 +1,21 @@
 package com.tech.imusic.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 import com.tech.imusic.R
 import com.tech.imusic.adapter.PlaylistAdapter
 import com.tech.imusic.databinding.AddPlaylistDialogBinding
 import com.tech.imusic.databinding.FragmentPlaylistBinding
-import com.tech.imusic.model.Music
 import com.tech.imusic.model.MusicPlaylist
 import com.tech.imusic.model.Playlist
 import java.text.SimpleDateFormat
@@ -92,6 +95,7 @@ class PlaylistFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()

@@ -75,7 +75,7 @@ class PlaylistDetailActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
         binding.playlistNamePD.text =
@@ -102,9 +102,6 @@ class PlaylistDetailActivity : AppCompatActivity() {
 
         //all save playlist data after close at Playlist detail activity
 
-        val editor = getSharedPreferences("FAVORITES_PLAYLIST", MODE_PRIVATE).edit()
-        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistFragment.musicPlaylist)
-        editor.putString("MusicPlaylist", jsonStringPlaylist)
-        editor.apply()
+        Utils.sharedPrefPlaylist(this)
     }
 }

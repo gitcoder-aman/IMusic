@@ -36,9 +36,17 @@
     <string name="delete">delete</string>
     <string name="your_name">Your Name</string>
     <string name="search">Search</string>
-    <string name="app_version">1.0</string>
+    <string name="app_version">App Version: 1.0</string>
     <string name="developed_and_designed_by">Developed and Designed by</string>
     <string name="aman_kumar">Aman Kumar</string>
     <string name="insta_id">coder.aman</string>
     <string name="linkedin_id">aman-kumar-4aaa631b5</string>
+    <string name="music_quote">Without music, life would be a mistake.</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="instagram">Instagram</string>
+    <string name="linkedin">Linkedin</string>
+    <string name="topic_feedback">Topic i.e Suggestion,Error etc.</string>
+    <string name="email_address">Email Address (Optional)</string>
+    <string name="send_btn">Send</string>
+    <string name="playbtn">playBtn</string>
 </resources>

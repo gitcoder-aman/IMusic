@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/instagram_item"
+        android:title="@string/instagram"
+        android:icon="@drawable/instagram"/>
+    <item
+        android:id="@+id/linkedin_item"
+        android:title="@string/linkedin"
+        android:icon="@drawable/linkedin"/>
+</menu>
